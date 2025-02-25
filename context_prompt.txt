@@ -1,0 +1,25 @@
+Je développe un système de tournoi où un hôte (PC) peut créer un tournoi en local ou en ligne. Voici les détails du projet :
+
+Technologies utilisées :
+
+    Backend : Node.js avec WebSockets pour la synchronisation en temps réel.
+    Frontend : HTML, CSS, JS natif avec Tailwind CSS.
+    Affichage du bracket : Utilisation de brackets.js pour un arbre de tournoi dynamique mis à jour entre les rounds.
+
+Fonctionnalités principales :
+
+    L’hôte (PC) peut créer un tournoi et choisir une liste d’images (de 2 à 512).
+    Types de tournoi disponibles : simple élimination ou double élimination.
+    Types de rounds possibles : 1v1, 1v1v1v1, 2v2.
+    Mode local : L’hôte gère les votes.
+    Mode online : Les clients (mobiles) peuvent rejoindre une partie via une page listant les tournois en cours ou en entrant un code de session.
+    Votes : Chaque round est un vote (comme Kahoot), avec une limite de 10 secondes ou fin du round si tout le monde a voté.
+    Affichage en ligne : L’écran du host agit comme Kahoot → il affiche les images et les résultats mais ne joue pas (les images ne sont pas envoyées aux clients).
+    Fin du tournoi : Une page affiche l’image gagnante.
+    Full anonyme : Pas de gestion d’utilisateurs, aucun compte requis.
+
+Ce que je veux de toi :
+
+    Aide-moi à structurer mon code, proposer des améliorations ou identifier des problèmes potentiels.
+    Donne-moi des idées pour optimiser la gestion des WebSockets et du bracket en live.
+    Si tu vois des bibliothèques ou méthodes plus adaptées à mon projet, propose-les.
