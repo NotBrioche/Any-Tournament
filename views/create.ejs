@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+  </head>
+  <body class="bg-background flex flex-col h-screen font-poppins">
+    <%- include('partials/header.ejs') %>
+    <div class="flex-1 flex flex-row p-14 gap-x-25">
+      <div class="flex flex-col text-2xl gap-y-5">
+        <button
+          type="button"
+          class="rounded-lg bg-secondary px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          Online room
+        </button>
+        <hr />
+        <button
+          type="button"
+          class="rounded-lg bg-selected px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          Single elimination
+        </button>
+        <button
+          type="button"
+          class="rounded-lg bg-secondary px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          Double elimination
+        </button>
+        <hr />
+        <button
+          type="button"
+          class="rounded-lg bg-selected px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          1v1
+        </button>
+        <button
+          type="button"
+          class="rounded-lg bg-secondary px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          1v1v1v1
+        </button>
+        <button
+          type="button"
+          class="rounded-lg bg-secondary px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          2v2
+        </button>
+        <button
+          type="button"
+          class="rounded-lg bg-secondary px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          Random
+        </button>
+        <hr />
+        <button
+          type="button"
+          class="rounded-lg text-3xl bg-primary text-white px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer"
+        >
+          Start
+        </button>
+        <a href="/"><button
+          type="button"
+          class="rounded-lg text-3xl bg-danger text-white px-6 py-1.5 hover:outline-3 hover:outline-black/20 hover:cursor-pointer w-full"
+        >
+          Quit
+        </button></a>
+      </div>
+      <div class="flex flex-col gap-y-5">
+        <input type="text" class="rounded-sm bg-selected text-2xl py-1 text-center" value="My room 1"></input>
+        <hr class="bg-black/10 border-0 h-[2px]">
+        <div class="rounded-sm bg-secondary text-center flex mx-10 text-2xl items-center">
+          <div class="flex-1">local</div>
+          <hr class="w-[2px] h-full bg-black/10 border-0"/>
+          <button type="button" class="text-red-500 font-bold p-2 hover:cursor-pointer">X</button>
+        </div>
+      </div>
+      <div class="flex-1 flex flex-col">
+        <div class="bg-selected w-full text-center text-3xl py-2">Images</div>
+        <div class="bg-black/10 flex-1 text-3xl text-center flex flex-col justify-center items-center">
+          <div>Drag and drop images or</div> 
+          <button type="button" class="rounded-lg text-white text-3xl px-20 py-2 bg-primary mt-2 hover:outline-black/10 hover:cursor-pointer hover:outline-3">Import</button>
+        </div>
+      </div>
+    </div>
+    <%- include('partials/footer.ejs') %>
+  </body>
+</html>
