@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+  </head>
+  <body>
+    <%- include('partials/header.ejs') %>
+    <main class="flex flex-row gap-x-14 p-14">
+      <nav class="flex flex-col gap-5">
+        <a href="/"><button class="btn danger w-full">Back</button></a>
+        <hr />
+
+        <div class="flex flex-col gap-3">
+          <input
+            type="text"
+            placeholder="Code"
+            class="bg-third w-50 rounded-lg py-1 text-center text-2xl font-medium uppercase focus:outline-hidden"
+            maxlength="4"
+          />
+          <button class="btn primary mx-5 py-1">Join</button>
+        </div>
+        <hr />
+        <p class="text-center text-3xl">Page 1</p>
+        <div class="grid grid-cols-2 gap-x-6 self-center">
+          <button class="btn primary w-min px-4 py-2"><</button>
+          <button class="btn primary w-min px-4 py-2">></button>
+        </div>
+      </nav>
+      <div class="grid w-full flex-1 grid-cols-4 grid-rows-6 gap-4">
+        <div class="card">
+          <h1>My room 1</h1>
+          <p>5 players - 32 images</p>
+        </div>
+        <div class="card">
+          <h1>My room 2</h1>
+          <p>1 player - 1 image</p>
+        </div>
+        <div class="card">
+          <h1>My room 3</h1>
+          <p>99+ players - 99+ images</p>
+        </div>
+      </div>
+    </main>
+    <%- include('partials/footer.ejs') %>
+  </body>
+</html>

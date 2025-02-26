@@ -3,8 +3,68 @@
 @theme {
   --font-poppins: "Poppins", sans-serif;
   --color-primary: #6096b4;
-  --color-secondary: #bdcdd6;
+  --color-second: #93bfcf;
+  --color-third: #bdcdd6;
   --color-danger: #b46060;
-  --color-selected: #93bfcf;
   --color-background: #f3f1ea;
+}
+
+@layer components {
+  * {
+    @apply font-poppins;
+  }
+
+  body {
+    @apply bg-background flex h-screen flex-col;
+  }
+
+  main {
+    @apply flex-1;
+  }
+
+  button {
+    @apply hover:cursor-pointer hover:outline-3 hover:outline-black/20;
+  }
+
+  hr {
+    @apply h-[2px] border-0 bg-black/10;
+  }
+
+  hr.vertical {
+    @apply h-full w-[2px] border-0 bg-black/10;
+  }
+
+  .card {
+    @apply hover:cursor-pointer;
+  }
+
+  .card h1 {
+    @apply bg-second rounded-t-lg p-2 text-3xl text-white;
+  }
+  .card p {
+    @apply bg-third rounded-b-lg p-4 text-xl;
+  }
+
+  .btn {
+    @apply rounded-lg px-6 py-2;
+  }
+  .primary {
+    @apply bg-primary active:bg-primary/90 text-3xl text-white;
+  }
+
+  .secondary {
+    @apply bg-second active:bg-second/90;
+  }
+
+  .third {
+    @apply bg-third active:bg-third/90;
+  }
+
+  .danger {
+    @apply bg-danger active:bg-danger/90 text-3xl text-white;
+  }
+
+  .no-hover {
+    @apply hover:outline-0;
+  }
 }

@@ -7,14 +7,11 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-red-500: oklch(0.637 0.237 25.331);
+    --color-green-500: oklch(0.723 0.219 149.579);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-xs: 20rem;
-    --container-sm: 24rem;
-    --container-md: 28rem;
-    --container-lg: 32rem;
-    --container-xl: 36rem;
     --text-xl: 1.25rem;
     --text-xl--line-height: calc(1.75 / 1.25);
     --text-2xl: 1.5rem;
@@ -23,7 +20,10 @@
     --text-3xl--line-height: calc(2.25 / 1.875);
     --text-4xl: 2.25rem;
     --text-4xl--line-height: calc(2.5 / 2.25);
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
     --font-weight-medium: 500;
+    --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --radius-sm: 0.25rem;
     --radius-lg: 0.5rem;
@@ -41,9 +41,9 @@
     );
     --font-poppins: "Poppins", sans-serif;
     --color-primary: #6096b4;
-    --color-secondary: #bdcdd6;
+    --color-second: #93bfcf;
+    --color-third: #bdcdd6;
     --color-danger: #b46060;
-    --color-selected: #93bfcf;
     --color-background: #f3f1ea;
   }
 }
@@ -189,23 +189,8 @@
   }
 }
 @layer utilities {
-  .collapse {
-    visibility: collapse;
-  }
-  .relative {
-    position: relative;
-  }
   .static {
     position: static;
-  }
-  .m-0 {
-    margin: calc(var(--spacing) * 0);
-  }
-  .m-auto {
-    margin: auto;
-  }
-  .mx-0 {
-    margin-inline: calc(var(--spacing) * 0);
   }
   .mx-5 {
     margin-inline: calc(var(--spacing) * 5);
@@ -216,74 +201,29 @@
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
-  .mt-6 {
-    margin-top: calc(var(--spacing) * 6);
-  }
-  .block {
-    display: block;
-  }
   .flex {
     display: flex;
   }
   .grid {
     display: grid;
   }
-  .inline-flex {
-    display: inline-flex;
-  }
-  .list-item {
-    display: list-item;
-  }
-  .table {
-    display: table;
-  }
-  .h-\[2px\] {
-    height: 2px;
-  }
-  .h-auto {
-    height: auto;
+  .h-\[20dvw\] {
+    height: 20dvw;
   }
   .h-full {
     height: 100%;
   }
-  .h-max {
-    height: max-content;
+  .w-50 {
+    width: calc(var(--spacing) * 50);
   }
-  .h-px {
-    height: 1px;
-  }
-  .h-screen {
-    height: 100vh;
-  }
-  .w-0 {
-    width: calc(var(--spacing) * 0);
-  }
-  .w-\[2px\] {
-    width: 2px;
-  }
-  .w-auto {
-    width: auto;
+  .w-\[30dvw\] {
+    width: 30dvw;
   }
   .w-full {
     width: 100%;
   }
-  .w-max {
-    width: max-content;
-  }
-  .max-w-4 {
-    max-width: calc(var(--spacing) * 4);
-  }
-  .max-w-lg {
-    max-width: var(--container-lg);
-  }
-  .max-w-md {
-    max-width: var(--container-md);
-  }
-  .max-w-xl {
-    max-width: var(--container-xl);
-  }
-  .min-w-sm {
-    min-width: var(--container-sm);
+  .w-min {
+    width: min-content;
   }
   .min-w-xs {
     min-width: var(--container-xs);
@@ -291,20 +231,14 @@
   .flex-1 {
     flex: 1;
   }
-  .flex-grow {
-    flex-grow: 1;
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .grow {
-    flex-grow: 1;
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  .border-collapse {
-    border-collapse: collapse;
-  }
-  .cursor-pointer {
-    cursor: pointer;
-  }
-  .resize {
-    resize: both;
+  .grid-rows-6 {
+    grid-template-rows: repeat(6, minmax(0, 1fr));
   }
   .flex-col {
     flex-direction: column;
@@ -312,44 +246,35 @@
   .flex-row {
     flex-direction: row;
   }
+  .content-center {
+    align-content: center;
+  }
   .items-center {
     align-items: center;
-  }
-  .items-stretch {
-    align-items: stretch;
   }
   .justify-center {
     justify-content: center;
   }
-  .justify-stretch {
-    justify-content: stretch;
-  }
-  .justify-items-stretch {
-    justify-items: stretch;
-  }
   .gap-3 {
     gap: calc(var(--spacing) * 3);
   }
-  .gap-10 {
-    gap: calc(var(--spacing) * 10);
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
   }
-  .gap-x-4 {
-    column-gap: calc(var(--spacing) * 4);
+  .gap-5 {
+    gap: calc(var(--spacing) * 5);
   }
-  .gap-x-10 {
-    column-gap: calc(var(--spacing) * 10);
+  .gap-20 {
+    gap: calc(var(--spacing) * 20);
+  }
+  .gap-x-6 {
+    column-gap: calc(var(--spacing) * 6);
+  }
+  .gap-x-14 {
+    column-gap: calc(var(--spacing) * 14);
   }
   .gap-x-25 {
     column-gap: calc(var(--spacing) * 25);
-  }
-  .gap-x-110 {
-    column-gap: calc(var(--spacing) * 110);
-  }
-  .gap-x-\[110\] {
-    column-gap: 110;
-  }
-  .gap-x-\[110px\] {
-    column-gap: 110px;
   }
   .gap-y-5 {
     row-gap: calc(var(--spacing) * 5);
@@ -360,8 +285,8 @@
   .gap-y-15 {
     row-gap: calc(var(--spacing) * 15);
   }
-  .rounded {
-    border-radius: 0.25rem;
+  .self-center {
+    align-self: center;
   }
   .rounded-lg {
     border-radius: var(--radius-lg);
@@ -369,118 +294,44 @@
   .rounded-sm {
     border-radius: var(--radius-sm);
   }
-  .border {
-    border-style: var(--tw-border-style);
-    border-width: 1px;
-  }
-  .border-0 {
-    border-style: var(--tw-border-style);
-    border-width: 0px;
-  }
-  .bg-background {
-    background-color: var(--color-background);
-  }
-  .bg-black {
-    background-color: var(--color-black);
-  }
   .bg-black\/10 {
     background-color: color-mix(in oklab, var(--color-black) 10%, transparent);
   }
   .bg-black\/20 {
     background-color: color-mix(in oklab, var(--color-black) 20%, transparent);
   }
-  .bg-danger {
-    background-color: var(--color-danger);
+  .bg-second {
+    background-color: var(--color-second);
   }
-  .bg-primary {
-    background-color: var(--color-primary);
+  .bg-third {
+    background-color: var(--color-third);
   }
-  .bg-secondary {
-    background-color: var(--color-secondary);
-  }
-  .bg-selected {
-    background-color: var(--color-selected);
-  }
-  .to-black {
-    --tw-gradient-to: var(--color-black);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .to-black\/20 {
-    --tw-gradient-to: color-mix(in oklab, var(--color-black) 20%, transparent);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .to-black\/80 {
-    --tw-gradient-to: color-mix(in oklab, var(--color-black) 80%, transparent);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .p-1 {
-    padding: calc(var(--spacing) * 1);
+  .object-contain {
+    object-fit: contain;
   }
   .p-2 {
     padding: calc(var(--spacing) * 2);
   }
-  .p-3 {
-    padding: calc(var(--spacing) * 3);
-  }
   .p-5 {
     padding: calc(var(--spacing) * 5);
-  }
-  .p-10 {
-    padding: calc(var(--spacing) * 10);
   }
   .p-14 {
     padding: calc(var(--spacing) * 14);
   }
-  .p-15 {
-    padding: calc(var(--spacing) * 15);
-  }
-  .p-60 {
-    padding: calc(var(--spacing) * 60);
-  }
-  .p-144 {
-    padding: calc(var(--spacing) * 144);
-  }
-  .px-3 {
-    padding-inline: calc(var(--spacing) * 3);
-  }
-  .px-6 {
-    padding-inline: calc(var(--spacing) * 6);
-  }
-  .px-10 {
-    padding-inline: calc(var(--spacing) * 10);
-  }
-  .px-15 {
-    padding-inline: calc(var(--spacing) * 15);
-  }
-  .px-16 {
-    padding-inline: calc(var(--spacing) * 16);
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
   }
   .px-20 {
     padding-inline: calc(var(--spacing) * 20);
   }
-  .px-32 {
-    padding-inline: calc(var(--spacing) * 32);
-  }
-  .py-0 {
-    padding-block: calc(var(--spacing) * 0);
-  }
-  .py-0\.5 {
-    padding-block: calc(var(--spacing) * 0.5);
-  }
   .py-1 {
     padding-block: calc(var(--spacing) * 1);
-  }
-  .py-1\.5 {
-    padding-block: calc(var(--spacing) * 1.5);
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
   }
   .text-center {
     text-align: center;
-  }
-  .align-middle {
-    vertical-align: middle;
   }
   .font-poppins {
     font-family: var(--font-poppins);
@@ -497,9 +348,9 @@
     font-size: var(--text-4xl);
     line-height: var(--tw-leading, var(--text-4xl--line-height));
   }
-  .text-xl {
-    font-size: var(--text-xl);
-    line-height: var(--tw-leading, var(--text-xl--line-height));
+  .text-5xl {
+    font-size: var(--text-5xl);
+    line-height: var(--tw-leading, var(--text-5xl--line-height));
   }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
@@ -509,136 +360,165 @@
     --tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium);
   }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
   .text-black {
     color: var(--color-black);
   }
   .text-red-500 {
     color: var(--color-red-500);
   }
-  .text-white {
-    color: var(--color-white);
+  .uppercase {
+    text-transform: uppercase;
   }
-  .underline {
-    text-decoration-line: underline;
-  }
-  .outline {
+  .outline-4 {
     outline-style: var(--tw-outline-style);
-    outline-width: 1px;
+    outline-width: 4px;
   }
-  .hover\:cursor-pointer {
+  .outline-black\/20 {
+    outline-color: color-mix(in oklab, var(--color-black) 20%, transparent);
+  }
+  .hover\:outline-green-500 {
+    &:hover {
+      @media (hover: hover) {
+        outline-color: var(--color-green-500);
+      }
+    }
+  }
+  .focus\:outline-hidden {
+    &:focus {
+      outline-style: none;
+      @media (forced-colors: active) {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+@layer components {
+  * {
+    font-family: var(--font-poppins);
+  }
+  body {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    background-color: var(--color-background);
+  }
+  main {
+    flex: 1;
+  }
+  button {
     &:hover {
       @media (hover: hover) {
         cursor: pointer;
       }
     }
-  }
-  .hover\:outline {
-    &:hover {
-      @media (hover: hover) {
-        outline-style: var(--tw-outline-style);
-        outline-width: 1px;
-      }
-    }
-  }
-  .hover\:outline-3 {
     &:hover {
       @media (hover: hover) {
         outline-style: var(--tw-outline-style);
         outline-width: 3px;
       }
     }
-  }
-  .hover\:outline-black {
-    &:hover {
-      @media (hover: hover) {
-        outline-color: var(--color-black);
-      }
-    }
-  }
-  .hover\:outline-black\/10 {
-    &:hover {
-      @media (hover: hover) {
-        outline-color: color-mix(in oklab, var(--color-black) 10%, transparent);
-      }
-    }
-  }
-  .hover\:outline-black\/20 {
     &:hover {
       @media (hover: hover) {
         outline-color: color-mix(in oklab, var(--color-black) 20%, transparent);
       }
     }
   }
-  .hover\:outline-black\/60 {
+  hr {
+    height: 2px;
+    border-style: var(--tw-border-style);
+    border-width: 0px;
+    background-color: color-mix(in oklab, var(--color-black) 10%, transparent);
+  }
+  hr.vertical {
+    height: 100%;
+    width: 2px;
+    border-style: var(--tw-border-style);
+    border-width: 0px;
+    background-color: color-mix(in oklab, var(--color-black) 10%, transparent);
+  }
+  .card {
     &:hover {
       @media (hover: hover) {
-        outline-color: color-mix(in oklab, var(--color-black) 60%, transparent);
+        cursor: pointer;
       }
     }
   }
-  .active\:bg-primary\/80 {
-    &:active {
-      background-color: color-mix(in oklab, var(--color-primary) 80%, transparent);
-    }
+  .card h1 {
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    background-color: var(--color-second);
+    padding: calc(var(--spacing) * 2);
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+    color: var(--color-white);
   }
-  .active\:bg-primary\/90 {
+  .card p {
+    border-bottom-right-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
+    background-color: var(--color-third);
+    padding: calc(var(--spacing) * 4);
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+  }
+  .btn {
+    border-radius: var(--radius-lg);
+    padding-inline: calc(var(--spacing) * 6);
+    padding-block: calc(var(--spacing) * 2);
+  }
+  .primary {
+    background-color: var(--color-primary);
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+    color: var(--color-white);
     &:active {
       background-color: color-mix(in oklab, var(--color-primary) 90%, transparent);
     }
   }
-}
-@property --tw-border-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
-@property --tw-gradient-position {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-gradient-from {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #0000;
-}
-@property --tw-gradient-via {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #0000;
-}
-@property --tw-gradient-to {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #0000;
-}
-@property --tw-gradient-stops {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-gradient-via-stops {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-gradient-from-position {
-  syntax: "<length-percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-@property --tw-gradient-via-position {
-  syntax: "<length-percentage>";
-  inherits: false;
-  initial-value: 50%;
-}
-@property --tw-gradient-to-position {
-  syntax: "<length-percentage>";
-  inherits: false;
-  initial-value: 100%;
+  .secondary {
+    background-color: var(--color-second);
+    &:active {
+      background-color: color-mix(in oklab, var(--color-second) 90%, transparent);
+    }
+  }
+  .third {
+    background-color: var(--color-third);
+    &:active {
+      background-color: color-mix(in oklab, var(--color-third) 90%, transparent);
+    }
+  }
+  .danger {
+    background-color: var(--color-danger);
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+    color: var(--color-white);
+    &:active {
+      background-color: color-mix(in oklab, var(--color-danger) 90%, transparent);
+    }
+  }
+  .no-hover {
+    &:hover {
+      @media (hover: hover) {
+        outline-style: var(--tw-outline-style);
+        outline-width: 0px;
+      }
+    }
+  }
 }
 @property --tw-font-weight {
   syntax: "*";
   inherits: false;
 }
 @property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;

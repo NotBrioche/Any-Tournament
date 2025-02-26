@@ -12,10 +12,6 @@ app.get("/", function (req, res) {
   res.render("index");
 });
 
-app.get("/create", function (req, res) {
-  res.render("create");
-});
-
 app.listen(PORT, () => {
   console.log("Listening on port  http://localhost:3000");
 });

@@ -3,28 +3,18 @@
   <head>
     <%- include('partials/head.ejs') %>
   </head>
-  <body class="bg-background flex flex-col h-screen">
+  <body>
     <%- include('partials/header.ejs') %>
-    <div
-      class="text-white font-medium font-poppins text-3xl gap-y-6 flex flex-col items-center justify-center flex-1"
-    >
+    <main class="flex flex-col items-center justify-center gap-y-6 font-medium">
       <a href="/create"
-        ><button
-          type="button"
-          class="rounded-lg bg-primary px-6 py-2 hover:outline-black/20 hover:outline-3 active:bg-primary/90 min-w-xs hover:cursor-pointer"
-        >
+        ><button type="button" class="btn primary min-w-xs">
           Create room
         </button></a
       >
       <a href="/join">
-        <button
-          type="button"
-          class="rounded-lg bg-primary px-6 py-2 hover:outline-black/20 hover:outline-3 active:bg-primary/90 min-w-xs hover:cursor-pointer"
-        >
-          Join room
-        </button></a
+        <button type="button" class="btn primary min-w-xs">Join room</button></a
       >
-    </div>
+    </main>
     <%- include('partials/footer.ejs') %>
   </body>
 </html>
