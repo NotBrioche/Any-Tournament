@@ -13,7 +13,6 @@ router.get("/", (req, res) => {
   }
 
   res.render("index");
-  res.end();
 });
 
 router.get("/create/:code?", (req, res) => {
@@ -25,17 +24,18 @@ router.get("/create/:code?", (req, res) => {
     return;
   }
   res.render("create", { rooms: rooms, code: req.params.code });
-  res.end();
 });
 
 router.get("/join", (req, res) => {
   res.render("join", { rooms: rooms });
-  res.end();
 });
 
 router.get("/tournament", (req, res) => {
   res.render("tournament");
-  res.end();
+});
+
+router.get("/local", (req, res) => {
+  res.render("local");
 });
 
 module.exports = router;
