@@ -3,13 +3,13 @@
   <head>
     <%- include('partials/head.ejs') %>
   </head>
+
   <body>
     <%- include('partials/header.ejs') %>
     <main class="flex flex-row gap-x-14 p-14">
       <nav class="flex flex-col gap-5">
         <a href="/"><button class="btn danger w-full">Back</button></a>
         <hr />
-
         <div class="flex flex-col gap-3">
           <input
             type="text"
@@ -27,18 +27,16 @@
         </div>
       </nav>
       <div class="grid w-full flex-1 grid-cols-4 grid-rows-6 gap-4">
-        <div class="card">
-          <h1>My room 1</h1>
-          <p>5 players - 32 images</p>
+        <% for (key in rooms.rooms) { const room = rooms.rooms[key]; %>
+        <div class="card" onclick="join('<%= room.code %>');">
+          <h1><%= room.name %></h1>
+          <p>
+            <%= room.users.length == 1 ? '1 player' : `${room.users.length}
+            players` %> - <%= room.images == 1 ? '1 image' : `${room.images}
+            images` %>
+          </p>
         </div>
-        <div class="card">
-          <h1>My room 2</h1>
-          <p>1 player - 1 image</p>
-        </div>
-        <div class="card">
-          <h1>My room 3</h1>
-          <p>99+ players - 99+ images</p>
-        </div>
+        <% } %>
       </div>
     </main>
     <%- include('partials/footer.ejs') %>

@@ -4,17 +4,24 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "start": "npx nodemon ./index.js",
     "build:css": "npx @tailwindcss/cli -i .\\input.css -o .\\public\\styles.css --watch"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.9",
     "autoprefixer": "^10.4.20",
+    "ejs-lint": "^2.0.1",
+    "nodemon": "^3.1.9",
     "postcss": "^8.5.3",
     "prettier": "^3.5.2",
+    "prettier-plugin-ejs": "^1.0.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4.0.9"
   }
