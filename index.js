@@ -2,7 +2,7 @@ var express = require("express");
 const path = require("path");
 const router = require("./src/routes/router");
 const cookieParser = require("cookie-parser");
-const { WebSocketInit } = require("./websocket");
+const { WebSocketInit } = require("./src/services/websocket");
 
 var app = express();
 

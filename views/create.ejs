@@ -3,6 +3,7 @@
   <head>
     <%- include('partials/head.ejs') %>
   </head>
+
   <body>
     <%- include('partials/header.ejs') %>
     <main class="flex flex-row gap-x-25 p-14">
@@ -22,17 +23,13 @@
         <button
           type="button"
           class="btn primary"
-          onclick="location.href = '/tournament'"
-        >
+          onclick="start('<%= room == null ? null : room.code %>');">
           Start
         </button>
         <button
           type="button"
           class="btn danger w-full"
-          <% if (room != null) { %>
-          onclick="remove('<%= room.code %>');"
-          <% } %>
-        >
+          onclick="remove('<%= room == null ? null : room.code %>');">
           Quit
         </button>
       </div>
@@ -41,21 +38,18 @@
           type="text"
           class="bg-second rounded-sm py-1 text-center text-2xl focus:outline-hidden"
           value="My room 1"
-          name="roomName"
-        />
+          name="roomName" />
         <hr />
-        <% if (room != null && room.users !== undefined) { %>
-        <% for (user of room.users) { %>
+        <% if (room != null && room.users !== undefined) { %> <% for (user of
+        room.users) { %>
         <div
-          class="bg-third mx-10 flex items-center rounded-sm text-center text-2xl"
-        >
+          class="bg-third mx-10 flex items-center rounded-sm text-center text-2xl">
           <div class="flex-1"><%= user.name %></div>
           <hr class="vertical" />
           <button
             type="button"
             class="no-hover p-2 font-bold text-red-500"
-            onclick="kick('<%= user.name %>', '<%= room.code %>')"
-          >
+            onclick="kick('<%= user.name %>', '<%= room.code %>')">
             X
           </button>
         </div>
@@ -64,15 +58,13 @@
       <div class="flex flex-1 flex-col">
         <div class="bg-second w-full py-2 text-center text-3xl">Images</div>
         <div
-          class="flex flex-1 flex-col items-center justify-center bg-black/10 text-center text-3xl"
-        >
-          <label for="folder" class="bg-primary rounded-lg p-5 m-5"
+          class="flex flex-1 flex-col items-center justify-center bg-black/10 text-center text-3xl">
+          <label for="folder" class="bg-primary m-5 rounded-lg p-5"
             >Choose a folder</label
           >
           <div
-            class="grid grid-cols-8 gap-x-5 gap-y-3 w-full"
-            id="images"
-          ></div>
+            class="grid w-full grid-cols-8 gap-x-5 gap-y-3"
+            id="images"></div>
         </div>
       </div>
     </main>
@@ -84,10 +76,7 @@
       directory
       multiple
       class="hidden"
-      <% if (room != null) { %>
-      onchange="updateText('<%= room.code %>');"
-      <% } %>
-    />
+      onchange="updateText('<%= room == null ? null : room.code %>');" />
     <%- include('partials/footer.ejs') %>
   </body>
 </html>

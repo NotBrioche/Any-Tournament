@@ -15,6 +15,10 @@ ws.onmessage = (event) => {
   if (data.type == "reload") {
     location.reload();
   }
+
+  if (data.type == "start") {
+    location.href = `/online/${data.params.code}`;
+  }
 };
 
 function create() {
@@ -90,6 +94,26 @@ function images(code, images) {
     JSON.stringify({
       type: "image",
       params: { code: code, images: images },
+    }),
+  );
+}
+
+function start(code) {
+  ws.send(
+    JSON.stringify({
+      type: "start",
+      params: {
+        code: code,
+      },
+    }),
+  );
+}
+
+function result(code) {
+  ws.send(
+    JSON.stringify({
+      type: "result",
+      params: { code: code },
     }),
   );
 }

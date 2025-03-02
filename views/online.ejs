@@ -7,28 +7,34 @@
     <%- include('partials/header.ejs') %>
     <main>
       <div class="flex h-full flex-col items-center justify-center gap-y-15">
-        <p class="text-4xl font-semibold">10s left</p>
+        <% if (img1 != null && img2 != null) { %>
+        <p class="text-4xl font-semibold" onclick="result('<%= code %>')">
+          10s left
+        </p>
         <div class="flex flex-row items-center justify-center gap-20">
           <div
-            class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20"
-          >
+            class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20">
             <img
-              src="https://placehold.co/500x500"
-              alt="placeholder"
+              src=""
+              alt=""
               class="h-full w-full object-contain"
-            />
+              id="img1"
+              image="<%= img1 %>" />
           </div>
           <p class="text-center text-5xl font-semibold">vs</p>
           <div
-            class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20"
-          >
+            class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20">
             <img
-              src="https://placehold.co/600x400"
-              alt="placeholder"
+              src=""
+              alt=""
               class="h-full w-full object-contain"
-            />
+              id="img2"
+              image="<%= img2 %>" />
           </div>
         </div>
+        <% } else { %>
+        <h1>Getting ready...</h1>
+        <% } %>
       </div>
     </main>
     <%- include('partials/footer.ejs') %>

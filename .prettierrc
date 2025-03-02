@@ -1,3 +1,4 @@
 {
-  "plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-ejs"]
+  "plugins": ["prettier-plugin-ejs", "prettier-plugin-tailwindcss"],
+  "bracketSameLine": true
 }

@@ -42,16 +42,18 @@ async function updateText(code) {
   images(code, nbFiles);
 }
 
-const load = document.querySelectorAll("img#fromData");
+function getLocalImage(id, number) {
+  const img = document.getElementById(id);
+
+  db.get(`image_${number}`).then((doc) => {
+    img.src = doc.image;
+  });
+}
+
+const load = document.querySelectorAll("img");
 
 if (load != null) {
   load.forEach((img) => {
-    db.info().then((info) => {
-      db.get(`image_${Math.floor(Math.random() * info.doc_count)}`).then(
-        (doc) => {
-          img.src = doc.image;
-        },
-      );
-    });
+    getLocalImage(img.id, img.attributes.image.value);
   });
 }

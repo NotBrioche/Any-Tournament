@@ -1,9 +1,8 @@
 const { v4: uuidv4 } = require("uuid");
 const { JsonDB, Config } = require("node-json-db");
+const tournament = require("./tournament");
 
 const db = new JsonDB(new Config("./src/data/rooms", true, true));
-
-// const rooms = { total: 0, rooms: {} };
 
 function createRoomCode() {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -63,6 +62,14 @@ async function WebSocketInit(port) {
         case "image":
           _images(ws, params);
           break;
+
+        case "start":
+          _start(ws, params);
+          break;
+
+        case "result":
+          _result(ws, params);
+          break;
       }
     });
   });
@@ -81,6 +88,7 @@ async function WebSocketInit(port) {
     const data = await db.getObjectDefault(`/rooms/${code}`, null);
     if (data == null) {
       const room = {
+        status: "waiting",
         code: code,
         owner: ws.id,
         users: [],
@@ -114,6 +122,11 @@ async function WebSocketInit(port) {
 
     if (room.users.includes(ws.id)) {
       ws.send(JSON.stringify({ type: "join", status: "DENY" }));
+      return;
+    }
+
+    if (room.status != "waiting") {
+      ws.send(JSON.stringify({ type: "join", status: "STARTED" }));
       return;
     }
 
@@ -171,6 +184,57 @@ async function WebSocketInit(port) {
           await db.push(`/rooms/${room.code}/images`, params.images);
           console.log(`Room ${params.code} has now ${params.images} images`);
         }
+      }
+    }
+  }
+
+  async function _start(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room != null) {
+      if (ws.id == room.owner && room.images > 1) {
+        console.log(
+          `${room.code} started tournament with ${room.images} image(s)`,
+        );
+
+        await db.push(`/rooms/${room.code}/status`, "playing");
+
+        await tournament.createTournament(room.images, room.code);
+
+        ws.send(JSON.stringify({ type: "start", params: { code: room.code } }));
+
+        setTimeout(async () => {
+          const players = await tournament.getNextBattle(room.code);
+          db.push(`/rooms/${room.code}/battle`, players);
+
+          wss.clients.forEach((client) => {
+            if (client.OPEN && client.id == room.owner) {
+              client.send(
+                JSON.stringify({
+                  type: "reload",
+                }),
+              );
+            }
+          });
+        }, 3000);
+      }
+    }
+  }
+
+  async function _result(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room != null) {
+      if (ws.id == room.owner) {
+        await tournament.setWinner(
+          room.code,
+          await tournament.getCurrentBattle(room.code),
+          0,
+        );
+
+        const players = await tournament.getNextBattle(room.code);
+        db.push(`/rooms/${room.code}/battle`, players);
+        ws.send(JSON.stringify({ type: "reload" }));
       }
     }
   }
