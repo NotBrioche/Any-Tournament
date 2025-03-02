@@ -28,10 +28,11 @@ function create() {
   );
 }
 
-function remove() {
+function remove(code) {
   ws.send(
     JSON.stringify({
       type: "remove",
+      params: { code: code },
     }),
   );
   location.href = "/";

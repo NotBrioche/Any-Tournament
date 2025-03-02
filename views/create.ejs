@@ -26,7 +26,13 @@
         >
           Start
         </button>
-        <button type="button" class="btn danger w-full" onclick="remove();">
+        <button
+          type="button"
+          class="btn danger w-full"
+          <% if (room != null) { %>
+          onclick="remove('<%= room.code %>');"
+          <% } %>
+        >
           Quit
         </button>
       </div>
@@ -38,8 +44,8 @@
           name="roomName"
         />
         <hr />
-        <% if (code !== undefined) { %>
-        <% for (key in rooms.rooms[code].users) { const user = rooms.rooms[code].users[key] %>
+        <% if (room != null && room.users !== undefined) { %>
+        <% for (user of room.users) { %>
         <div
           class="bg-third mx-10 flex items-center rounded-sm text-center text-2xl"
         >
@@ -48,7 +54,7 @@
           <button
             type="button"
             class="no-hover p-2 font-bold text-red-500"
-            onclick="kick('<%= user.name %>', '<%= code %>')"
+            onclick="kick('<%= user.name %>', '<%= room.code %>')"
           >
             X
           </button>
@@ -78,7 +84,9 @@
       directory
       multiple
       class="hidden"
-      onchange="updateText('<%= code %>');"
+      <% if (room != null) { %>
+      onchange="updateText('<%= room.code %>');"
+      <% } %>
     />
     <%- include('partials/footer.ejs') %>
   </body>

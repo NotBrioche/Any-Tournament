@@ -2,15 +2,18 @@
   "name": "any-tournament",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "npx nodemon ./index.js",
+    "start": "npx nodemon --ignore 'src/data/*.json' ./index.js",
     "build:css": "npx @tailwindcss/cli -i .\\input.css -o .\\public\\styles.css --watch"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-promise-router": "^4.1.1",
+    "node-json-db": "^2.3.1",
     "uuid": "^11.1.0",
     "ws": "^8.18.1"
   },

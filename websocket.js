@@ -1,6 +1,9 @@
 const { v4: uuidv4 } = require("uuid");
+const { JsonDB, Config } = require("node-json-db");
 
-const rooms = { total: 0, rooms: {} };
+const db = new JsonDB(new Config("./src/data/rooms", true, true));
+
+// const rooms = { total: 0, rooms: {} };
 
 function createRoomCode() {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -10,8 +13,8 @@ function createRoomCode() {
     for (let i = 0; i < 4; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    for (key in rooms.rooms) {
-      if (rooms.rooms[key] !== undefined) {
+    for (key in db.rooms) {
+      if (db.rooms[key] !== undefined) {
         continue;
       }
     }
@@ -19,7 +22,9 @@ function createRoomCode() {
   return code;
 }
 
-function WebSocketInit(port) {
+async function WebSocketInit(port) {
+  await db.push("/", { total: 0, rooms: {} });
+
   const { WebSocketServer } = require("ws");
 
   const wss = new WebSocketServer({ port: port });
@@ -62,7 +67,7 @@ function WebSocketInit(port) {
     });
   });
 
-  function _create(ws, params) {
+  async function _create(ws, params) {
     const code = createRoomCode();
 
     if (ws.room !== undefined) {
@@ -73,7 +78,8 @@ function WebSocketInit(port) {
       ws.send(JSON.stringify({ type: "code", code: code }));
     }
 
-    if (rooms.rooms[code] === undefined) {
+    const data = await db.getObjectDefault(`/rooms/${code}`, null);
+    if (data == null) {
       const room = {
         code: code,
         owner: ws.id,
@@ -82,39 +88,45 @@ function WebSocketInit(port) {
         name: params.name,
       };
 
-      rooms.rooms[code] = room;
-      rooms.total = Object.keys(rooms.rooms).length;
+      await db.push(`/rooms/${code}`, room);
+
+      const length = Object.keys(await db.getData("/rooms")).length;
+      await db.push(`/total`, length);
+
       console.log("Created room " + code);
       ws.send(JSON.stringify({ code: code, name: params.name }));
-    } else {
-      // console.log("Room " + code + " already exists");
     }
   }
 
-  function _remove(ws, params) {
-    for (key of Object.keys(rooms.rooms)) {
-      if (rooms.rooms[key].owner == ws.id) {
-        console.log("Deleted room : " + rooms.rooms[key].code);
-        delete rooms.rooms[key];
+  async function _remove(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room != null) {
+      if (room.owner == ws.id) {
+        console.log("Deleted room : " + room.code);
+        await db.delete(`/rooms/${room.code}`);
       }
     }
   }
 
-  function _join(ws, params) {
-    for (user of rooms.rooms[params.code].users) {
-      if (user.id == ws.id) {
-        ws.send(JSON.stringify({ type: "join", status: "DENY" }));
-        return;
-      }
+  async function _join(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room.users.includes(ws.id)) {
+      ws.send(JSON.stringify({ type: "join", status: "DENY" }));
+      return;
     }
 
-    if (rooms.rooms[params.code].users.length < 100) {
-      rooms.rooms[params.code].users.push({ name: params.name, id: ws.id });
+    if (room.users.length < 100) {
+      await db.push(`/rooms/${room.code}/users[]`, {
+        name: params.name,
+        id: ws.id,
+      });
       ws.send(JSON.stringify({ type: "join", status: "OK" }));
-      console.log(`${ws.id} joined ${params.code}`);
+      console.log(`${ws.id} joined ${room.code}`);
 
       wss.clients.forEach((client) => {
-        if (client.OPEN && client.id == rooms.rooms[params.code].owner) {
+        if (client.OPEN && client.id == room.owner) {
           client.send(
             JSON.stringify({
               type: "reload",
@@ -127,32 +139,36 @@ function WebSocketInit(port) {
     }
   }
 
-  function _kick(ws, params) {
-    if (rooms.rooms[params.code] !== undefined) {
-      if (ws.id == rooms.rooms[params.code].owner) {
-        for (user of rooms.rooms[params.code].users) {
+  async function _kick(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room !== undefined) {
+      if (ws.id == room.owner) {
+        for (user of room.users) {
           if (user.name == params.name) {
-            const index = rooms.rooms[params.code].users.indexOf(user);
-            rooms.rooms[params.code].users.splice(index, 1);
-            console.log(`${params.code} owner kicked ${user.id}`);
-            break;
+            const index = room.users.indexOf(user);
+            await db.delete(`/rooms/${room.code}/users[${index}]`);
+
+            console.log(`${room.code} owner kicked ${params.name}`);
+
+            ws.send(
+              JSON.stringify({
+                type: "reload",
+              }),
+            );
           }
         }
-
-        ws.send(
-          JSON.stringify({
-            type: "reload",
-          }),
-        );
       }
     }
   }
 
-  function _images(ws, params) {
-    if (rooms.rooms[params.code] !== undefined) {
-      if (ws.id == rooms.rooms[params.code].owner) {
-        if (ws.id == rooms.rooms[params.code].owner) {
-          rooms.rooms[params.code].images = params.images;
+  async function _images(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room != null) {
+      if (ws.id == room.owner) {
+        if (ws.id == room.owner) {
+          await db.push(`/rooms/${room.code}/images`, params.images);
           console.log(`Room ${params.code} has now ${params.images} images`);
         }
       }
@@ -160,4 +176,4 @@ function WebSocketInit(port) {
   }
 }
 
-module.exports = { WebSocketInit, rooms, createRoomCode };
+module.exports = { WebSocketInit, db };

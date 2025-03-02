@@ -1,8 +1,9 @@
 var express = require("express");
 const path = require("path");
-const router = require("./router/router");
+const router = require("./src/routes/router");
 const cookieParser = require("cookie-parser");
 const { WebSocketInit } = require("./websocket");
+
 var app = express();
 
 const PORT = 3000;

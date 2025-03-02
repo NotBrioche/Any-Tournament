@@ -27,7 +27,7 @@
         </div>
       </nav>
       <div class="grid w-full flex-1 grid-cols-4 grid-rows-6 gap-4">
-        <% for (key in rooms.rooms) { const room = rooms.rooms[key]; %>
+        <% for (key of Object.keys(rooms)) { const room = rooms[key] %>
         <div class="card" onclick="join('<%= room.code %>');">
           <h1><%= room.name %></h1>
           <p>
