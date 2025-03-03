@@ -1,1 +1,4 @@
 node_modules/
+
+src/data/rooms.json
+src/data/tournaments/
