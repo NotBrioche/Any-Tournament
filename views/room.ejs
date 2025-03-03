@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+  </head>
+  <body>
+    <%- include('partials/header.ejs') %>
+    <main class="flex flex-col items-center justify-center gap-y-6 font-medium">
+      <% if (room != null) { %>
+      <h1>
+        <%- room.name %> - <%- room.users.length %> players - <%- room.images %>
+        images
+      </h1>
+      <% } %> <% if (room != null && room.users !== undefined) { %> <% for (user
+      of room.users) { %>
+      <div class="bg-third mx-10 rounded-sm text-center text-2xl">
+        <div class="px-4 py-2"><%= user.name %></div>
+      </div>
+      <% }} %>
+    </main>
+    <%- include('partials/footer.ejs') %>
+  </body>
+</html>

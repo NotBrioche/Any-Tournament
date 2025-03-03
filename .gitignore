@@ -1,4 +1,6 @@
 node_modules/
 
 src/data/rooms.json
-src/data/tournaments/
+src/data/tournaments/*
+
+public/styles.css

@@ -30,14 +30,6 @@ router.get("/join", async (req, res) => {
   res.render("join", { total: data.total, rooms: data.rooms });
 });
 
-router.get("/tournament", (req, res) => {
-  res.render("tournament");
-});
-
-router.get("/local", (req, res) => {
-  res.render("local");
-});
-
 router.get("/online/:code", async (req, res) => {
   const id = req.cookies.id;
   const room = await roomDB.getObject(`/rooms/${req.params.code}`);
@@ -58,6 +50,12 @@ router.get("/online/:code", async (req, res) => {
 
 router.get("/vote", (req, res) => {
   res.render("vote");
+});
+
+router.get("/room/:code", async (req, res) => {
+  const room = await roomDB.getObject(`/rooms/${req.params.code}`);
+
+  res.render("room", { room: room });
 });
 
 module.exports = router;

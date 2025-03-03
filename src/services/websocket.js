@@ -226,11 +226,14 @@ async function WebSocketInit(port) {
 
     if (room != null) {
       if (ws.id == room.owner) {
-        await tournament.setWinner(
-          room.code,
-          await tournament.getCurrentBattle(room.code),
-          0,
-        );
+        const battle = await tournament.getCurrentBattle(room.code);
+
+        if (battle == -1) {
+          ws.send(JSON.stringify({ type: "end" }));
+          return;
+        }
+
+        await tournament.setWinner(room.code, battle, 0);
 
         const players = await tournament.getNextBattle(room.code);
         db.push(`/rooms/${room.code}/battle`, players);

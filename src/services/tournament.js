@@ -1,4 +1,5 @@
 const { JsonDB, Config } = require("node-json-db");
+const fs = require("node:fs");
 
 async function createTournament(players, code) {
   const matches = [];
@@ -150,7 +151,21 @@ async function getCurrentBattle(code) {
     new Config(`./src/data/tournaments/${code}`, true, false),
   );
 
-  return await db.getObject("/match");
+  let battle = await db.getObject("/match");
+  const totalBattle = await db.getObject("/matches");
+
+  console.log(battle);
+  console.log(totalBattle.length);
+
+  if (battle + 1 == totalBattle.length) {
+    battle = -1;
+  }
+
+  return battle;
+}
+
+async function deleteTournament(code) {
+  fs.unlinkSync(`./src/data/tournaments/${code}`);
 }
 
 module.exports = {
@@ -158,4 +173,5 @@ module.exports = {
   getNextBattle,
   setWinner,
   getCurrentBattle,
+  deleteTournament,
 };
