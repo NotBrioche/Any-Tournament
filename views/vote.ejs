@@ -3,12 +3,33 @@
   <head>
     <%- include('partials/head.ejs') %>
   </head>
+
   <body>
     <%- include('partials/header.ejs') %>
     <main
       class="flex flex-col items-center justify-center gap-15 gap-y-6 p-14 font-medium sm:flex-row">
-      <button type="button" class="btn primary h-full w-full">1</button>
-      <button type="button" class="btn primary h-full w-full">2</button>
+      <% if (room.users.find((user) => user.id == id)) { %> <% if (room.status
+      == "voting") { %>
+
+      <button
+        type="button"
+        class="btn primary h-full w-full"
+        onclick="vote('<%= room.code %>')">
+        1
+      </button>
+      <button
+        type="button"
+        class="btn primary h-full w-full"
+        onclick="vote('<%= room.code %>')">
+        2
+      </button>
+
+      <% } else { %>
+      <h1>Room is not voting!</h1>
+      <%} %> <% } else { %>
+
+      <h1>You are not in the room!</h1>
+      <%} %>
     </main>
     <%- include('partials/footer.ejs') %>
   </body>

@@ -19,6 +19,10 @@ ws.onmessage = (event) => {
   if (data.type == "start") {
     location.href = `/online/${data.params.code}`;
   }
+
+  if (data.type == "vote") {
+    location.href = `/vote/${data.params.code}`;
+  }
 };
 
 function create() {
@@ -114,6 +118,17 @@ function result(code) {
     JSON.stringify({
       type: "result",
       params: { code: code },
+    }),
+  );
+}
+
+function vote(code) {
+  const vote = event.srcElement.innerHTML.trim();
+
+  ws.send(
+    JSON.stringify({
+      type: "vote",
+      params: { code: code, vote: vote },
     }),
   );
 }

@@ -70,6 +70,10 @@ async function WebSocketInit(port) {
         case "result":
           _result(ws, params);
           break;
+
+        case "vote":
+          _vote(ws, params);
+          break;
       }
     });
   });
@@ -94,6 +98,11 @@ async function WebSocketInit(port) {
         users: [],
         images: params.images ?? 0,
         name: params.name,
+        battle: [null, null],
+        first: 0,
+        second: 0,
+        voted: [],
+        roundTimestamp: null,
       };
 
       await db.push(`/rooms/${code}`, room);
@@ -203,17 +212,36 @@ async function WebSocketInit(port) {
 
         ws.send(JSON.stringify({ type: "start", params: { code: room.code } }));
 
+        wss.clients.forEach((client) => {
+          if (client.OPEN) {
+            if (room.users.find((user) => user.id == client.id)) {
+              client.send(
+                JSON.stringify({
+                  type: "vote",
+                  params: { code: room.code },
+                }),
+              );
+            }
+          }
+        });
+
         setTimeout(async () => {
+          await db.push(`/rooms/${room.code}/status`, "voting");
           const players = await tournament.getNextBattle(room.code);
           db.push(`/rooms/${room.code}/battle`, players);
 
           wss.clients.forEach((client) => {
-            if (client.OPEN && client.id == room.owner) {
-              client.send(
-                JSON.stringify({
-                  type: "reload",
-                }),
-              );
+            if (client.OPEN) {
+              if (
+                client.id == room.owner ||
+                room.users.find((user) => user.id == client.id)
+              ) {
+                client.send(
+                  JSON.stringify({
+                    type: "reload",
+                  }),
+                );
+              }
             }
           });
         }, 3000);
@@ -233,11 +261,55 @@ async function WebSocketInit(port) {
           return;
         }
 
-        await tournament.setWinner(room.code, battle, 0);
+        await db.push(`/rooms/${room.code}/voted`, []);
+        await db.push(`/rooms/${room.code}/first`, 0);
+        await db.push(`/rooms/${room.code}/second`, 0);
+
+        const result =
+          room.first == room.second
+            ? Math.round(Math.random()) + 1
+            : Math.max(room.first, room.second) == room.first
+              ? 1
+              : 2;
+
+        await tournament.setWinner(room.code, battle, result);
 
         const players = await tournament.getNextBattle(room.code);
         db.push(`/rooms/${room.code}/battle`, players);
         ws.send(JSON.stringify({ type: "reload" }));
+      }
+    }
+  }
+
+  async function _vote(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room != null && room.status == "voting") {
+      if (room.users.find((user) => user.id == ws.id)) {
+        if (room.voted.includes(ws.id)) return;
+
+        console.log(`${ws.id} voted for ${params.vote}`);
+
+        if (params.vote == 1) {
+          await db.push(`/rooms/${room.code}/first`, room.first + 1);
+        } else if (params.vote == 2) {
+          await db.push(`/rooms/${room.code}/second`, room.second + 1);
+        }
+
+        if (room.voted.length + 1 == room.users.length) {
+          let ownerClient;
+          wss.clients.forEach((client) => {
+            if (client.OPEN) {
+              if (client.id == room.owner) {
+                return (ownerClient = client);
+              }
+            }
+          });
+
+          _result(ownerClient, { code: room.code });
+          return;
+        }
+        await db.push(`/rooms/${room.code}/voted[]`, ws.id);
       }
     }
   }

@@ -8,9 +8,24 @@
     <main>
       <div class="flex h-full flex-col items-center justify-center gap-y-15">
         <% if (img1 != null && img2 != null) { %>
-        <p class="text-4xl font-semibold" onclick="result('<%= code %>')">
-          10s left
-        </p>
+
+        <script defer>
+          const limit = "<%= room.roundTimestamp%>";
+
+          setInterval(() => {
+            document.getElementById("timeLeft").innerHTML =
+              `${Math.floor((parseInt(limit) - Date.now()) / 1000)}s left`;
+          }, 100);
+
+          setTimeout(
+            () => {
+              result("<%= room.code %>");
+            },
+            parseInt(limit) - Date.now() + 1,
+          );
+        </script>
+
+        <p class="text-4xl font-semibold" id="timeLeft"></p>
         <div class="flex flex-row items-center justify-center gap-20">
           <div
             class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20">

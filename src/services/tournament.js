@@ -97,16 +97,16 @@ function randomAndRemove(array) {
 }
 
 async function setWinner(code, match, winner) {
-  if (winner > 1 || winner < 0) {
+  if (winner > 2 || winner < 1) {
     return;
   }
 
   const db = new JsonDB(
-    new Config(`./src/data/tournaments/${code}`, true, false),
+    new Config(`./src/data/tournaments/${code}`, true, true),
   );
 
   const matchData = await db.getObject(`/matches[${match - 1}]`);
-  const winnerValue = matchData.players[winner];
+  const winnerValue = matchData.players[winner - 1];
 
   await db.push(`/matches[${match - 1}]/result`, winner);
 
@@ -128,7 +128,7 @@ async function getNextBattle(code) {
   }
 
   const db = new JsonDB(
-    new Config(`./src/data/tournaments/${code}`, true, false),
+    new Config(`./src/data/tournaments/${code}`, true, true),
   );
 
   const tournament = await db.getData("/");
@@ -148,14 +148,11 @@ async function getCurrentBattle(code) {
   }
 
   const db = new JsonDB(
-    new Config(`./src/data/tournaments/${code}`, true, false),
+    new Config(`./src/data/tournaments/${code}`, true, true),
   );
 
   let battle = await db.getObject("/match");
   const totalBattle = await db.getObject("/matches");
-
-  console.log(battle);
-  console.log(totalBattle.length);
 
   if (battle + 1 == totalBattle.length) {
     battle = -1;

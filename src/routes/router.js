@@ -35,21 +35,23 @@ router.get("/online/:code", async (req, res) => {
   const room = await roomDB.getObject(`/rooms/${req.params.code}`);
 
   if (id == room.owner) {
-    if (!room.battle) {
-      res.render("online", { img1: null, img2: null });
-      return;
-    }
+    await roomDB.push(
+      `/rooms/${room.code}/roundTimestamp`,
+      Date.now() + 10 * 1000,
+    );
 
     res.render("online", {
       img1: room.battle[0],
       img2: room.battle[1],
-      code: room.code,
+      room: room,
     });
   }
 });
 
-router.get("/vote", (req, res) => {
-  res.render("vote");
+router.get("/vote/:code", async (req, res) => {
+  const room = await roomDB.getObject(`/rooms/${req.params.code}`);
+
+  res.render("vote", { room: room, id: req.cookies.id });
 });
 
 router.get("/room/:code", async (req, res) => {

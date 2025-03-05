@@ -17,37 +17,45 @@ async function updateText(code) {
   for (let i = 0; i < nbFiles; i++) {
     const reader = new FileReader();
 
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       const div = document.createElement("div");
       div.classList.add("bg-black/10", "h-15", "w-full");
 
       const img = document.createElement("img");
       img.classList.add("object-contain", "h-full", "w-full");
-      img.src = event.target.result;
+      img.src = URL.createObjectURL(new Blob([event.target.result]));
 
       const dbImage = {
         _id: `image_${i}`,
-        image: event.target.result,
+        _attachements: {
+          [folder.files[i].name]: {
+            content_type: folder.files[i].type,
+            data: event.target.result,
+          },
+        },
       };
 
-      db.put(dbImage);
+      await db.put(dbImage);
 
       div.appendChild(img);
       allImages.appendChild(div);
     };
 
-    reader.readAsDataURL(folder.files.item(i));
+    reader.readAsText(folder.files.item(i));
   }
 
   images(code, nbFiles);
 }
 
-function getLocalImage(id, number) {
+async function getLocalImage(id, number) {
   const img = document.getElementById(id);
 
-  db.get(`image_${number}`).then((doc) => {
-    img.src = doc.image;
-  });
+  const doc = await db.get(`image_${number}`);
+  const fileName = Object.keys(doc._attachments)[0];
+
+  const blob = await db.getAttachment(`image_${number}`, fileName);
+  const url = URL.createObjectURL(blob);
+  img.src = url;
 }
 
 const load = document.querySelectorAll("img");

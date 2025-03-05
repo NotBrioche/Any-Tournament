@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "npx nodemon --ignore 'src/data/**' ./index.js",
+    "start": "npx nodemon --ignore 'src/data/**'--ignore 'public/**' ./index.js",
     "build:css": "npx @tailwindcss/cli -i .\\input.css -o .\\public\\styles.css --watch"
   },
   "dependencies": {
