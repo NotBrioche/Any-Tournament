@@ -1,5 +1,4 @@
 const db = new PouchDB("images");
-const remoteCouch = false;
 
 async function updateText(code) {
   const folder = document.getElementById("folder");
@@ -18,19 +17,21 @@ async function updateText(code) {
     const reader = new FileReader();
 
     reader.onload = async (event) => {
+      const blob = new Blob([event.target.result]);
+
       const div = document.createElement("div");
       div.classList.add("bg-black/10", "h-15", "w-full");
 
       const img = document.createElement("img");
       img.classList.add("object-contain", "h-full", "w-full");
-      img.src = URL.createObjectURL(new Blob([event.target.result]));
+      img.src = URL.createObjectURL(blob);
 
       const dbImage = {
         _id: `image_${i}`,
-        _attachements: {
+        _attachments: {
           [folder.files[i].name]: {
             content_type: folder.files[i].type,
-            data: event.target.result,
+            data: blob,
           },
         },
       };
@@ -41,7 +42,7 @@ async function updateText(code) {
       allImages.appendChild(div);
     };
 
-    reader.readAsText(folder.files.item(i));
+    reader.readAsArrayBuffer(folder.files.item(i));
   }
 
   images(code, nbFiles);
@@ -58,7 +59,7 @@ async function getLocalImage(id, number) {
   img.src = url;
 }
 
-const load = document.querySelectorAll("img");
+const load = document.querySelectorAll("img[image]");
 
 if (load != null) {
   load.forEach((img) => {

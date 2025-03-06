@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+  </head>
+  <body>
+    <%- include('partials/header.ejs') %>
+    <main class="flex flex-col items-center justify-center gap-y-6 font-medium">
+      <div
+        class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20">
+        <img
+          src=""
+          alt=""
+          class="h-full w-full object-contain"
+          id="result"
+          image="<%= img %>" />
+      </div>
+      <button
+        type="button"
+        class="btn primary min-w-xs"
+        onclick="restart('<%= code %>')">
+        Back to lobby
+      </button>
+    </main>
+    <%- include('partials/footer.ejs') %>
+  </body>
+</html>

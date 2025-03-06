@@ -23,6 +23,14 @@ ws.onmessage = (event) => {
   if (data.type == "vote") {
     location.href = `/vote/${data.params.code}`;
   }
+
+  if (data.type == "end") {
+    location.href = `/result/${data.params.code}`;
+  }
+
+  if (data.type == "lobby") {
+    location.href = `/room/${data.params.code}`;
+  }
 };
 
 function create() {
@@ -131,4 +139,8 @@ function vote(code) {
       params: { code: code, vote: vote },
     }),
   );
+}
+
+function restart(code) {
+  ws.send(JSON.stringify({ type: "restart", params: { code: code } }));
 }

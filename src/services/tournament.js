@@ -7,7 +7,7 @@ async function createTournament(players, code) {
   const numbers = [...Array(players).keys()];
   shuffle(numbers);
   const db = new JsonDB(
-    new Config(`./src/data/tournaments/${code}`, true, false),
+    new Config(`./src/data/tournaments/${code}`, true, true),
   );
 
   await db.push("/round", 0);
@@ -133,7 +133,10 @@ async function getNextBattle(code) {
 
   const tournament = await db.getData("/");
 
-  if (tournament.matches[tournament.match + 1].round != tournament.round) {
+  if (
+    tournament.match > 0 &&
+    tournament.matches[tournament.match - 1].round != tournament.round
+  ) {
     await db.push("/round", tournament.round + 1);
   }
 
@@ -154,7 +157,7 @@ async function getCurrentBattle(code) {
   let battle = await db.getObject("/match");
   const totalBattle = await db.getObject("/matches");
 
-  if (battle + 1 == totalBattle.length) {
+  if (battle + 1 > totalBattle.length) {
     battle = -1;
   }
 
@@ -162,7 +165,7 @@ async function getCurrentBattle(code) {
 }
 
 async function deleteTournament(code) {
-  fs.unlinkSync(`./src/data/tournaments/${code}`);
+  fs.unlinkSync(`./src/data/tournaments/${code}.json`);
 }
 
 module.exports = {

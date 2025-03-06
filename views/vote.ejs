@@ -24,8 +24,10 @@
         2
       </button>
 
+      <% } else if (room.status == "finished") { %>
+      <h1>Contemplate your winner!</h1>
       <% } else { %>
-      <h1>Room is not voting!</h1>
+      <h1>Get ready!</h1>
       <%} %> <% } else { %>
 
       <h1>You are not in the room!</h1>

@@ -74,6 +74,10 @@ async function WebSocketInit(port) {
         case "vote":
           _vote(ws, params);
           break;
+
+        case "restart":
+          _restart(ws, params);
+          break;
       }
     });
   });
@@ -249,7 +253,7 @@ async function WebSocketInit(port) {
     }
   }
 
-  async function _result(ws, params) {
+  async function _result(ws, params, votes = null) {
     const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
 
     if (room != null) {
@@ -257,7 +261,21 @@ async function WebSocketInit(port) {
         const battle = await tournament.getCurrentBattle(room.code);
 
         if (battle == -1) {
-          ws.send(JSON.stringify({ type: "end" }));
+          await db.push(`/rooms/${room.code}/status`, "finished");
+
+          wss.clients.forEach((client) => {
+            if (client.OPEN) {
+              if (room.users.find((user) => user.id == client.id)) {
+                client.send(
+                  JSON.stringify({
+                    type: "reload",
+                  }),
+                );
+              }
+            }
+          });
+
+          ws.send(JSON.stringify({ type: "end", params: { code: room.code } }));
           return;
         }
 
@@ -265,17 +283,28 @@ async function WebSocketInit(port) {
         await db.push(`/rooms/${room.code}/first`, 0);
         await db.push(`/rooms/${room.code}/second`, 0);
 
-        const result =
-          room.first == room.second
-            ? Math.round(Math.random()) + 1
-            : Math.max(room.first, room.second) == room.first
-              ? 1
-              : 2;
+        let result;
+
+        if (!votes) {
+          result =
+            room.first == room.second
+              ? Math.round(Math.random()) + 1
+              : Math.max(room.first, room.second) == room.first
+                ? 1
+                : 2;
+        } else {
+          result =
+            votes[0] == votes[1]
+              ? Math.round(Math.random()) + 1
+              : Math.max(votes[0], votes[1]) == votes[0]
+                ? 1
+                : 2;
+        }
 
         await tournament.setWinner(room.code, battle, result);
 
         const players = await tournament.getNextBattle(room.code);
-        db.push(`/rooms/${room.code}/battle`, players);
+        await db.push(`/rooms/${room.code}/battle`, players);
         ws.send(JSON.stringify({ type: "reload" }));
       }
     }
@@ -287,8 +316,6 @@ async function WebSocketInit(port) {
     if (room != null && room.status == "voting") {
       if (room.users.find((user) => user.id == ws.id)) {
         if (room.voted.includes(ws.id)) return;
-
-        console.log(`${ws.id} voted for ${params.vote}`);
 
         if (params.vote == 1) {
           await db.push(`/rooms/${room.code}/first`, room.first + 1);
@@ -306,11 +333,42 @@ async function WebSocketInit(port) {
             }
           });
 
-          _result(ownerClient, { code: room.code });
+          await _result(ownerClient, { code: room.code }, [
+            room.first + 1,
+            room.second + 1,
+          ]);
           return;
         }
+
         await db.push(`/rooms/${room.code}/voted[]`, ws.id);
       }
+    }
+  }
+
+  async function _restart(ws, params) {
+    const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room != null && ws.id == room.owner && room.status == "finished") {
+      await db.push(`/rooms/${room.code}/status`, "waiting");
+      await db.push(`/rooms/${room.code}/battle`, [null, null]);
+      await db.push(`/rooms/${room.code}/first`, 0);
+      await db.push(`/rooms/${room.code}/second`, 0);
+
+      tournament.deleteTournament(room.code);
+      ws.send(JSON.stringify({ type: "code", code: room.code }));
+
+      wss.clients.forEach((client) => {
+        if (client.OPEN) {
+          if (room.users.find((user) => user.id == client.id)) {
+            client.send(
+              JSON.stringify({
+                type: "lobby",
+                params: { code: room.code },
+              }),
+            );
+          }
+        }
+      });
     }
   }
 }
