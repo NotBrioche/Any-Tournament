@@ -133,9 +133,16 @@ async function WebSocketInit(port) {
   async function _join(ws, params) {
     const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
 
-    if (room.users.includes(ws.id)) {
-      ws.send(JSON.stringify({ type: "join", status: "DENY" }));
-      return;
+    for (user of room.users) {
+      if (user.id == ws.id) {
+        ws.send(JSON.stringify({ type: "join", status: "DENY" }));
+        return;
+      }
+
+      if (user.name == params.name) {
+        ws.send(JSON.stringify({ type: "join", status: "DENY" }));
+        return;
+      }
     }
 
     if (room.status != "waiting") {
