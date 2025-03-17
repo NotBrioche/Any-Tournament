@@ -173,6 +173,17 @@ async function WebSocketInit(port) {
         for (user of room.users) {
           if (user.name == params.name) {
             const index = room.users.indexOf(user);
+
+            wss.clients.forEach((client) => {
+              if (client.OPEN && client.id == user.id) {
+                client.send(
+                  JSON.stringify({
+                    type: "kicked",
+                  }),
+                );
+              }
+            });
+
             await db.delete(`/rooms/${room.code}/users[${index}]`);
 
             console.log(`${room.code} owner kicked ${params.name}`);

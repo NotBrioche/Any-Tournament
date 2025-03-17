@@ -31,6 +31,10 @@ ws.onmessage = (event) => {
   if (data.type == "lobby") {
     location.href = `/room/${data.params.code}`;
   }
+
+  if (data.type == "kicked") {
+    location.href = "/join";
+  }
 };
 
 function create() {
