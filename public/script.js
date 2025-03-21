@@ -86,6 +86,11 @@ if (load != null) {
 
 async function loadImages() {
   const docs = await db.allDocs();
+
+  if (docs.rows.length > 0) {
+    document.getElementById("images").classList.add("h-full");
+  }
+
   for (const doc of docs.rows) {
     addImageToCreateDiv(doc.id);
   }
