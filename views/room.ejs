@@ -8,7 +8,7 @@
     <main class="flex flex-col items-center justify-center gap-y-6 font-medium">
       <% if (room != null) { %>
       <h1>
-        <%- room.name %> - <%- room.users.length %> players - <%- room.images %>
+        <%= room.name %> - <%= room.users.length %> players - <%= room.images %>
         images
       </h1>
       <% } %> <% if (room != null && room.users !== undefined) { %> <% for (user

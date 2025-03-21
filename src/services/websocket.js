@@ -126,12 +126,24 @@ async function WebSocketInit(port) {
       if (room.owner == ws.id) {
         console.log("Deleted room : " + room.code);
         await db.delete(`/rooms/${room.code}`);
+
+        wss.clients.forEach((client) => {
+          if (client.OPEN && room.users.find((user) => user.id == client.id)) {
+            client.send(
+              JSON.stringify({
+                type: "kicked",
+              }),
+            );
+          }
+        });
       }
     }
   }
 
   async function _join(ws, params) {
     const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
+
+    if (room == null) return;
 
     if (room.users.includes(ws.id)) {
       ws.send(JSON.stringify({ type: "join", status: "DENY" }));
@@ -216,7 +228,7 @@ async function WebSocketInit(port) {
     const room = await db.getObjectDefault(`/rooms/${params.code}`, null);
 
     if (room != null) {
-      if (ws.id == room.owner && room.images > 1) {
+      if (ws.id == room.owner && room.images > 1 && room.users.length > 0) {
         console.log(
           `${room.code} started tournament with ${room.images} image(s)`,
         );

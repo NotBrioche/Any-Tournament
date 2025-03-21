@@ -1,0 +1,4 @@
+{
+  "ignore": ["public/**/*", "src/data/**/*"],
+  "exec": "node index.js"
+}

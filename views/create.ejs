@@ -8,9 +8,18 @@
     <%- include('partials/header.ejs') %>
     <main class="flex flex-row gap-x-25 p-14">
       <div class="flex flex-col gap-y-5 text-2xl">
+        <% if (room == null) { %>
         <button type="button" class="btn secondary" onclick="create();">
           Online room
         </button>
+        <% } else { %>
+        <button
+          type="button"
+          class="btn secondary"
+          onclick="remove('<%= room.code %>'); location.href = '/create';">
+          Local room
+        </button>
+        <% } %>
         <hr />
         <button type="button" class="btn secondary">Single elimination</button>
         <button type="button" class="btn third">Double elimination</button>
@@ -29,16 +38,25 @@
         <button
           type="button"
           class="btn danger w-full"
-          onclick="remove('<%= room == null ? null : room.code %>');">
+          onclick="remove('<%= room == null ? null : room.code %>'); location.href = '/';">
           Quit
         </button>
       </div>
       <div class="flex flex-col gap-y-5">
+        <% if (room == null) { %>
         <input
           type="text"
           class="bg-second rounded-sm py-1 text-center text-2xl focus:outline-hidden"
           value="My room 1"
           name="roomName" />
+        <% } else { %>
+        <input
+          type="text"
+          class="bg-second rounded-sm py-1 text-center text-2xl focus:outline-hidden"
+          value="<%= room.name %>"
+          name="roomName"
+          disabled />
+        <% } %>
         <hr />
         <% if (room != null && room.users !== undefined) { %> <% for (user of
         room.users) { %>

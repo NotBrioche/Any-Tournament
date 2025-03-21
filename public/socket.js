@@ -38,6 +38,7 @@ ws.onmessage = (event) => {
 };
 
 function create() {
+  new PouchDB("images").destroy();
   const room = document.getElementsByName("roomName")[0].value;
 
   ws.send(
@@ -49,13 +50,13 @@ function create() {
 }
 
 function remove(code) {
+  new PouchDB("images").destroy();
   ws.send(
     JSON.stringify({
       type: "remove",
       params: { code: code },
     }),
   );
-  location.href = "/";
 }
 
 async function join(code) {
