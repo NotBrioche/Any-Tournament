@@ -221,6 +221,9 @@ async function WebSocketInit(port) {
           console.log(`Room ${params.code} has now ${params.images} images`);
         }
       }
+    } else {
+      const matches = await tournament.createTournament(params.images);
+      ws.send(JSON.stringify({ type: "image", params: { matches: matches } }));
     }
   }
 

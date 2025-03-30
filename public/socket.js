@@ -106,7 +106,17 @@ function SendAndWait(ws, message, expectedType, timeout = 5000) {
   });
 }
 
-function images(code, images) {
+async function images(code, images) {
+  if (code == "") {
+    const matches = await SendAndWait(
+      ws,
+      JSON.stringify({ type: "image", params: { images: images } }),
+      "image",
+    );
+
+    matchesToPouchDb(matches.params.matches);
+  }
+
   ws.send(
     JSON.stringify({
       type: "image",
@@ -116,6 +126,10 @@ function images(code, images) {
 }
 
 function start(code) {
+  if (code == "") {
+    window.location.href = "/local";
+  }
+
   ws.send(
     JSON.stringify({
       type: "start",

@@ -10,23 +10,19 @@
         <div class="flex flex-row items-center justify-center gap-20">
           <div
             class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20 hover:outline-green-500">
-            <img
-              src=""
-              alt=""
-              class="h-full w-full object-contain"
-              id="fromData" />
+            <img src="" alt="" class="h-full w-full object-contain" id="img1" />
           </div>
           <p class="text-center text-5xl font-semibold">vs</p>
           <div
             class="h-[20dvw] w-[30dvw] content-center bg-black/20 outline-4 outline-black/20 hover:outline-green-500">
-            <img
-              src=""
-              alt=""
-              class="h-full w-full object-contain"
-              id="fromData" />
+            <img src="" alt="" class="h-full w-full object-contain" id="img2" />
           </div>
         </div>
-        <button class="btn primary">Next</button>
+        <button
+          class="btn primary"
+          onclick="getAndLoadImagesFromRound();">
+          Next
+        </button>
       </div>
     </main>
     <%- include('partials/footer.ejs') %>

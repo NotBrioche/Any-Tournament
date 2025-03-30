@@ -11,7 +11,7 @@ async function updateText(code) {
   const docs = await db.allDocs();
 
   for (const doc of docs.rows) {
-    await db.remove(doc.doc);
+    await db.remove(doc.id, doc.value.rev);
   }
 
   if (nbFiles > 0) {
@@ -87,8 +87,12 @@ if (load != null) {
 async function loadImages() {
   const docs = await db.allDocs();
 
+  const imageDiv = document.getElementById("images");
+
+  if (imageDiv == null) return;
+
   if (docs.rows.length > 0) {
-    document.getElementById("images").classList.add("h-full");
+    imageDiv.classList.add("h-full");
   }
 
   for (const doc of docs.rows) {

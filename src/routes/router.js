@@ -49,6 +49,10 @@ router.get("/online/:code", async (req, res) => {
   }
 });
 
+router.get("/local", (req, res) => {
+  res.render("local");
+});
+
 router.get("/vote/:code", async (req, res) => {
   const room = await roomDB.getObject(`/rooms/${req.params.code}`);
 

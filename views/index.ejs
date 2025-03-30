@@ -6,7 +6,7 @@
   <body>
     <%- include('partials/header.ejs') %>
     <main class="flex flex-col items-center justify-center gap-y-6 font-medium">
-      <a href="/create"
+      <a href="/create" onclick="new PouchDB('images').destroy();"
         ><button type="button" class="btn primary min-w-xs">
           Create room
         </button></a

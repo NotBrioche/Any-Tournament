@@ -6,13 +6,15 @@ async function createTournament(players, code) {
 
   const numbers = [...Array(players).keys()];
   shuffle(numbers);
-  const db = new JsonDB(
-    new Config(`./src/data/tournaments/${code}`, true, true),
-  );
 
-  await db.push("/round", 0);
-  await db.push("/match", 0);
-  await db.push("/matches", []);
+  let db;
+  if (code !== undefined) {
+    db = new JsonDB(new Config(`./src/data/tournaments/${code}`, true, true));
+
+    await db.push("/round", 0);
+    await db.push("/match", 0);
+    await db.push("/matches", []);
+  }
 
   let nearestPow = 1;
   while (nearestPow < players) {
@@ -77,7 +79,11 @@ async function createTournament(players, code) {
     loop++;
   }
 
-  await db.push("/matches", matches);
+  if (code !== undefined) {
+    await db.push("/matches", matches);
+  } else {
+    return matches;
+  }
 }
 
 function shuffle(array) {
