@@ -17,9 +17,21 @@ async function matchesToPouchDb(matches) {
 async function getAndLoadImagesFromRound() {
   const db = new PouchDB("tournament");
   const round = await db.get("round");
-  db.put({ _id: "round", round: round.round + 1, _rev: round._rev });
+
+  let choosed = false;
+  document.getElementsByName("image").forEach((radio) => {
+    if (radio.checked == true) choosed = true;
+  });
+
+  if (choosed) {
+    db.put({ _id: "round", round: round.round + 1, _rev: round._rev });
+  }
 
   const match = await db.get(`match_${round.round}`);
+
+  document.getElementsByName("image").forEach((radio) => {
+    radio.checked = false;
+  });
 
   await getLocalImage("img1", match.players[0]);
   await getLocalImage("img2", match.players[1]);
