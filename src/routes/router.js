@@ -65,19 +65,23 @@ router.get("/room/:code", async (req, res) => {
   res.render("room", { room: room });
 });
 
-router.get("/result/:code", async (req, res) => {
-  const room = await roomDB.getObject(`/rooms/${req.params.code}`);
+router.get("/result/:code?", async (req, res) => {
+  const room = await roomDB.getObjectDefault(`/rooms/${req.params.code}`, null);
 
-  const db = new JsonDB(
-    new Config(`./src/data/tournaments/${room.code}`, true, true),
-  );
+  if (room != null) {
+    const db = new JsonDB(
+      new Config(`./src/data/tournaments/${room.code}`, true, true),
+    );
 
-  const matches = await db.getObject(`/matches`);
-  const winner = await db.getObject(
-    `/matches[${matches.length - 1}]/players[${matches[matches.length - 1].result - 1}]`,
-  );
+    const matches = await db.getObject(`/matches`);
+    const winner = await db.getObject(
+      `/matches[${matches.length - 1}]/players[${matches[matches.length - 1].result - 1}]`,
+    );
 
-  res.render("result", { img: winner, code: room.code });
+    res.render("result", { img: winner, code: room.code });
+  } else {
+    res.render("result", { img: "null", code: null });
+  }
 });
 
 module.exports = router;

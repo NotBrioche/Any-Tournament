@@ -68,6 +68,18 @@ async function addImageToCreateDiv(id) {
 async function getLocalImage(id, number) {
   const img = document.getElementById(id);
 
+  if (number == "null") {
+    const tournamentDb = await new PouchDB("tournament");
+    const matches = await tournamentDb.allDocs({ include_docs: true });
+
+    const winnerDoc = await tournamentDb.get(
+      `match_${matches.rows[matches.total_rows - 1].doc.round}`,
+    );
+    const num = winnerDoc.players[winnerDoc.result - 1];
+
+    number = num;
+  }
+
   const doc = await db.get(`image_${number}`);
   const fileName = Object.keys(doc._attachments)[0];
 

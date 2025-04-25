@@ -15,12 +15,21 @@
           id="result"
           image="<%= img %>" />
       </div>
+      <% if (code !== null) { %>
       <button
         type="button"
         class="btn primary min-w-xs"
         onclick="restart('<%= code %>')">
         Back to lobby
       </button>
+      <% } else { %>
+      <button
+        type="button"
+        class="btn primary min-w-xs"
+        onclick="location.href = '/';">
+        Back to lobby
+      </button>
+      <% } %>
     </main>
     <%- include('partials/footer.ejs') %>
   </body>
