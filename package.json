@@ -6,10 +6,11 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "debug": "nodemon --inspect --config .\\nodemon.json",
-    "build:css": "npx @tailwindcss/cli -i .\\input.css -o .\\public\\styles.css --watch"
+    "debug": "nodemon --inspect --config ./nodemon.json",
+    "build:css": "npx @tailwindcss/cli -i ./input.css -o ./public/styles.css"
   },
   "dependencies": {
+    "@tailwindcss/cli": "^4.0.9",
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
@@ -19,7 +20,6 @@
     "ws": "^8.18.1"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.0.9",
     "autoprefixer": "^10.4.20",
     "ejs-lint": "^2.0.1",
     "nodemon": "^3.1.9",

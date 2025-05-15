@@ -1,0 +1,5 @@
+.git/
+.vscode/
+.gitignore
+.prettierrc
+nodemon.json
