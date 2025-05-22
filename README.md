@@ -21,9 +21,17 @@ Any Tournament is an application designed to easily create and manage image-base
 
 ## **Getting Started**
 
+### Manual
 1. Install the project
 2. Install dependencies: `npm install`
 3. Start the application: `npm start`
+
+### Docker
+To run this project in a docker simply copy/paste the command below :
+
+```docker
+docker run --name anytournament -p 3000:3000 -p 8080:8080 -d notbrioche/anytournament:latest
+```
 
 ## **Usage**
 
